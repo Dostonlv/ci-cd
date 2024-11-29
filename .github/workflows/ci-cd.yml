@@ -22,26 +22,26 @@ jobs:
 
       # Deploy to Server
       - name: Deploy to Server
-       run: |
-  echo "$SSH_KEY" > private_key.pem
-  chmod 600 private_key.pem
+        run: |
+          echo "$SSH_KEY" > private_key.pem
+          chmod 600 private_key.pem
 
-  # Server host key-ni known_hosts fayliga qo'shish
-  mkdir -p ~/.ssh
-  echo "$SSH_HOST $(ssh-keyscan -H $SSH_HOST)" >> ~/.ssh/known_hosts
+          # Server host key-ni known_hosts fayliga qo'shish
+          mkdir -p ~/.ssh
+          echo "$SSH_HOST $(ssh-keyscan -H $SSH_HOST)" >> ~/.ssh/known_hosts
 
-  # Fajllarni serverga uzatish
-  scp -i private_key.pem -r . $SSH_USER@$SSH_HOST:/var/www/golang-server-ci-cd
+          # Fajllarni serverga uzatish
+          scp -i private_key.pem -r . $SSH_USER@$SSH_HOST:/var/www/golang-server-ci-cd
 
-  # Serverga SSH orqali ulanish va pm2 operatsiyalarini bajarish
-  ssh -i private_key.pem $SSH_USER@$SSH_HOST << 'EOF'
-    cd /var/www/golang-server-ci-cd
-    pm2 stop golang-server || true
-    pm2 start package.json
-    pm2 save
-  EOF
-shell: /usr/bin/bash -e {0}
-env:
-  SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-  SSH_HOST: ${{ secrets.SSH_HOST }}
-  SSH_USER: ${{ secrets.SSH_USER }}
+          # Serverga SSH orqali ulanish va pm2 operatsiyalarini bajarish
+          ssh -i private_key.pem $SSH_USER@$SSH_HOST << 'EOF'
+          cd /var/www/golang-server-ci-cd
+          pm2 stop golang-server || true
+          pm2 start package.json
+          pm2 save
+          EOF
+        shell: /usr/bin/bash -e {0}
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
