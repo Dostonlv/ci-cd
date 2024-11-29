@@ -18,7 +18,7 @@ jobs:
       - name: Build Go binary
         run: |
           go mod tidy
-          go build -o main .
+          
 
       # Deploy to Server
       - name: Deploy to Server
@@ -39,6 +39,7 @@ jobs:
           # Serverga SSH orqali ulanish va pm2 operatsiyalarini bajarish
           ssh -i private_key.pem $SSH_USER@$SSH_HOST << 'EOF'
           cd /var/www/golang-server-ci-cd
+          go build -o main main.go 
           pm2 stop golang-server || true
           pm2 start package.json
           pm2 save
