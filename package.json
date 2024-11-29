@@ -1,0 +1,6 @@
+{
+    "apps" : [{
+      "name"        : "myserver",
+      "script"      : "./main"
+    }]
+}
