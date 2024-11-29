@@ -1,6 +1,6 @@
 {
     "apps" : [{
-      "name"        : "myserver",
+      "name"        : "ci",
       "script"      : "./main"
     }]
 }
